@@ -3,9 +3,7 @@ import numpy as np
 from math import floor
 
 
-ASCII_TAPE = ' .,:;ox%#@'
-DEFAULT_WIDTH = 50
-DEFAULT_HEIGHT = 50
+ASCII_TAPE = ' .,:;i1tfLCG08@'
 
 
 def image_to_matrix(image: Image) -> np.array:
@@ -20,7 +18,7 @@ def mean_to_ascii(mean: float) -> str:
     return symbol
 
 
-def transform(image: Image, out_width: int = DEFAULT_WIDTH, out_height: int = DEFAULT_HEIGHT) -> str:
+def transform(image: Image, out_width: int, out_height: int) -> str:
     width, height = image.size
     frame_width = width // out_width
     frame_height = height // out_height
@@ -36,4 +34,3 @@ def transform(image: Image, out_width: int = DEFAULT_WIDTH, out_height: int = DE
         lines.append(line)
     output = '\n'.join(lines)
     return output
-
