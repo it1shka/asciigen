@@ -3,7 +3,7 @@ import numpy as np
 from math import floor
 
 
-ASCII_TAPE = ' .,:;i1tfLCG08@'
+ASCII_TAPE = ' .,:;ox%#@'
 
 
 def image_to_matrix(image: Image) -> np.array:
