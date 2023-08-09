@@ -34,3 +34,19 @@ def transform(image: Image, out_width: int, out_height: int) -> str:
         lines.append(line)
     output = '\n'.join(lines)
     return output
+
+
+def get_ascii_size(image: Image, params: dict[str, str], compression: int) -> tuple[int, int]:
+    img_width, img_height = image.size
+    width, height = params.get('width'), params.get('height')
+    if width:
+        width = int(width)
+    if height:
+        height = int(height)
+    if not width and not height:
+        width, height = img_width // compression, img_height // compression
+    if not width:
+        width = floor(img_width * (height / img_height))
+    if not height:
+        height = floor(img_height * (width / img_width))
+    return width, height

@@ -1,11 +1,9 @@
-import sys
 from textwrap import dedent
 from PIL import Image
-from lib import transform
-from math import floor
+from lib import transform, get_ascii_size
 
 
-SIZE_COMPRESSION = 12
+CONSOLE_SIZE_COMPRESSION = 12
 
 
 def start_console_application() -> None:
@@ -41,7 +39,7 @@ def start_console_application() -> None:
             continue
 
         params = tokens_to_dict(rest_tokens)
-        out_width, out_height = get_ascii_size(image, params)
+        out_width, out_height = get_ascii_size(image, params, CONSOLE_SIZE_COMPRESSION)
         ascii_output = transform(image, out_width, out_height)
         print(ascii_output)
 
@@ -50,22 +48,6 @@ def start_console_application() -> None:
         output_file_path = params['file']
         with open(output_file_path, 'w+') as output_file:
             output_file.write(ascii_output)
-
-
-def get_ascii_size(image: Image, params: dict[str, str]) -> tuple[int, int]:
-    img_width, img_height = image.size
-    width, height = params.get('width'), params.get('height')
-    if width:
-        width = int(width)
-    if height:
-        height = int(height)
-    if not width and not height:
-        width, height = img_width // SIZE_COMPRESSION, img_height // SIZE_COMPRESSION
-    if not width:
-        width = floor(img_width * (height / img_height))
-    if not height:
-        height = floor(img_height * (width / img_width))
-    return width, height
 
 
 def tokens_to_dict(tokens: list[str]) -> dict[str, str]:
@@ -80,32 +62,5 @@ def tokens_to_dict(tokens: list[str]) -> dict[str, str]:
     return output
 
 
-def start_telegram_bot() -> None:
-    print(dedent('''
-        You entered telegram bot mode of asciigen.
-        
-        Hit Ctrl+C or Ctrl+D to stop it.
-    '''))
-    print('TODO: This is incomplete')
-    sys.exit(1)
-    # TODO: ...
-
-
-def get_mode() -> str:
-    if len(sys.argv) < 2:
-        output = input('Please, provide a mode (app/bot): ')
-        output = output.strip()
-    else:
-        output = sys.argv[1]
-    return output
-
-
 if __name__ == '__main__':
-    mode = get_mode()
-    if mode == 'app':
-        start_console_application()
-    elif mode == 'bot':
-        start_telegram_bot()
-    else:
-        print(f'Unknown mode: {mode}')
-        sys.exit(1)
+    start_console_application()
